@@ -18,11 +18,11 @@ RUN fc-cache -fv
 
 WORKDIR /app
 
-# Copy requirements first
+# Copy requirements
 COPY requirements.txt .
 
-# Install Python packages
-RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+# Install Python packages (Alpine doesn't need --break-system-packages)
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy app
 COPY app.py .
