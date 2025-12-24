@@ -1,26 +1,18 @@
-FROM jrottenberg/ffmpeg:4.4-alpine
+FROM jrottenberg/ffmpeg:4.4-ubuntu
 
 USER root
 
-# Install system dependencies
-RUN apk add --no-cache \
+# Install Python and dependencies
+RUN apt-get update && apt-get install -y \
     python3 \
-    py3-pip \
+    python3-pip \
     wget \
     curl \
     fontconfig \
-    ttf-dejavu \
-    ttf-liberation \
-    font-noto \
-    jpeg-dev \
-    zlib-dev \
-    freetype-dev \
-    lcms2-dev \
-    openjpeg-dev \
-    tiff-dev \
-    gcc \
-    musl-dev \
-    python3-dev
+    fonts-dejavu-core \
+    fonts-liberation \
+    fonts-noto \
+    && rm -rf /var/lib/apt/lists/*
 
 # Font cache
 RUN fc-cache -fv
@@ -38,7 +30,7 @@ COPY app.py .
 
 EXPOSE 5000
 
-# CRITICAL: Override ENTRYPOINT to disable ffmpeg auto-execution
+# Override ENTRYPOINT
 ENTRYPOINT []
 
 # Start gunicorn
