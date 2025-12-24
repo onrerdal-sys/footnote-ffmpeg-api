@@ -2,20 +2,11 @@ FROM jrottenberg/ffmpeg:4.4-ubuntu
 
 USER root
 
-# Install Python and dependencies
+# Install ONLY Python and pip (fonts already exist in base image)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    wget \
-    curl \
-    fontconfig \
-    fonts-dejavu-core \
-    fonts-liberation \
-    fonts-noto \
     && rm -rf /var/lib/apt/lists/*
-
-# Font cache
-RUN fc-cache -fv
 
 WORKDIR /app
 
