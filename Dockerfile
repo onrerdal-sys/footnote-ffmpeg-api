@@ -2,7 +2,7 @@ FROM jrottenberg/ffmpeg:4.4-alpine
 
 USER root
 
-# Install system dependencies for Pillow and Python
+# Install system dependencies
 RUN apk add --no-cache \
     python3 \
     py3-pip \
@@ -18,13 +18,6 @@ RUN apk add --no-cache \
     lcms2-dev \
     openjpeg-dev \
     tiff-dev \
-    tk-dev \
-    tcl-dev \
-    harfbuzz-dev \
-    fribidi-dev \
-    libimagequant-dev \
-    libxcb-dev \
-    libpng-dev \
     gcc \
     musl-dev \
     python3-dev
@@ -45,4 +38,8 @@ COPY app.py .
 
 EXPOSE 5000
 
+# CRITICAL: Override ENTRYPOINT to disable ffmpeg auto-execution
+ENTRYPOINT []
+
+# Start gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "900", "app:app"]
