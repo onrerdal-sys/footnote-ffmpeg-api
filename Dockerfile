@@ -1,29 +1,30 @@
-FROM jrottenberg/ffmpeg:4.4-ubuntu
+FROM jrottenberg/ffmpeg:4.4-alpine
 
 USER root
 
-# System updates and dependencies
-RUN apt-get update && apt-get install -y \
+# Install Python and dependencies
+RUN apk add --no-cache \
     python3 \
-    python3-pip \
+    py3-pip \
     wget \
     curl \
     fontconfig \
-    fonts-dejavu-core \
-    fonts-liberation \
-    fonts-noto \
-    && rm -rf /var/lib/apt/lists/*
+    ttf-dejavu \
+    ttf-liberation \
+    font-noto
 
 # Font cache
 RUN fc-cache -fv
 
 WORKDIR /app
 
-# Python dependencies
+# Copy requirements first
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
 
-# App
+# Install Python packages
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+
+# Copy app
 COPY app.py .
 
 EXPOSE 5000
